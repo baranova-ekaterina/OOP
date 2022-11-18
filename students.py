@@ -21,15 +21,44 @@ class Student:
         else:
             return 'Ошибка'
 
-    def av_grade(some_student, some_course):
-        if isinstance(student, Student) and course in self.grades:
-            for key, value in self.grades:
-                av_gr = sum(value) / len(value)
-            return av_gr
-                
-
     def __str__(self):
-        return  f'Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка: () \nКурсы в процессе: {",".join(self.courses_in_progress)} \nЗавершенные курсы: {",".join(self.finished_courses)}\n'       
+        res = f'Имя: {self.name} \n' \
+              f'Фамилия: {self.surname} \n' \
+              f'Средняя оценка: {self.average_grade()}\n' \
+              f'Курсы в процессе: {",".join(self.courses_in_progress)} \n' \
+              f'Завершенные курсы: {",".join(self.finished_courses)}\n'
+        return res
+
+    def average_grade(self):
+        sum_hw = 0
+        count = 0 
+        for course in self.grades.values():
+            sum_hw += sum(course) 
+            count += len(course)
+        return round(sum_hw / count, 2)
+
+    def __lt__(self, other_student):
+        if not isinstance(other_student, Student):
+            print('Такого студента нет')
+            return
+        else:
+            compare = self.average_grade() < other_student.average_grade()
+            if compare:
+                print(f'{self.name} {self.surname} учится хуже, чем {other_student.name} {other_student.surname}')
+            else:
+                print(f'{self.name} {self.surname} учится лучше, чем {other_student.name} {other_student.surname}')
+            return compare
+            
+    
+#def av_grades(course = 'Python'):
+    #av_list = []
+    #for student in Student.student_ch:
+        #if course in student.courses_in_progress or course in student.finished_courses:
+            #for grades in student.grades.get(course):
+                #av_list.append(grades)
+    #average = sum(av_list) / len(av_list)
+    #return print(average)
+#av_grades()
 
 class Mentor:
     def __init__(self, name, surname):
@@ -46,9 +75,33 @@ class Lecturer(Mentor):
         self.scores = {}
         Lecturer.lectors.append(self)
 
+    def av_grade(self):
+        sum_hw = 0
+        count = 0 
+        for course in self.scores.values():
+            sum_hw += sum(course) 
+            count += len(course)
+        return round(sum_hw / count, 2)
+
     def __str__(self):
-        return f'Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекции: ()\n'
+        res = f'Имя: {self.name} \n' \
+              f'Фамилия: {self.surname} \n' \
+              f'Средняя оценка за лекции: {self.av_grade()}\n'
+        return res
             
+    def __lt__(self, other_lector):
+            if not isinstance(other_lector, Lecturer):
+                print('Такого лектора нет')
+                return
+            else:
+                compare = self.av_grade() < other_lector.av_grade()
+                if compare:
+                    print(f'{self.name} {self.surname} читает лекции хуже, чем {other_lector.name} {other_lector.surname}')
+                else:
+                    print(f'{self.name} {self.surname} читает лекции лучше, чем {other_lector.name} {other_lector.surname}')
+                return compare
+            
+
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -65,22 +118,10 @@ class Reviewer(Mentor):
             return 'Ошибка'
 
     def __str__(self):
-        return f'Имя: {self.name} \nФамилия: {self.surname}\n' 
-        #res3 = (
-            #f'Имя: {self.name} \n' 
-             #'Фамилия: {self.surname}'
-            #)
-        #return res3
-    
-def av_grade(some_student, some_course):
-    if isinstance(student_1, Student) and course in self.grades:
-        for key, value in self.grades:
-            av_gr = sum(value) / len(value)
-        return av_gr
-      
-    #for key, value in Lecturer.scores.values():
-        #av_gr = sum(value) / len(value)
-    #return av_gr
+        res = f'Имя: {self.name} \n' \
+              f'Фамилия: {self.surname}\n'
+        return res
+
 
 
 student_1 = Student('Иван', 'Иванов', 'мужской')
@@ -131,8 +172,8 @@ print(lector_2.scores)
 print(lector_1)
 print(lector_2)
 
-tap = av_grade(student_1, "Python")
-print(tap)
+print(student_1.__lt__(student_2))
+print(lector_1.__lt__(lector_2))
 
 #old_student = Student('Ruoy', 'Eman', 'male')
 #old_student.courses_in_progress += ['Python']
