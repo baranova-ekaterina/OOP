@@ -1,5 +1,5 @@
 class Student:
-    student_ch = []
+    student_list = []
     def __init__(self, name, surname, gender):
         self.name = name
         self.surname = surname
@@ -7,7 +7,7 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
-        Student.student_ch.append(self)
+        Student.student_list.append(self)
  
     def add_courses(self, course_name):
         self.finished_courses.append(course_name)
@@ -36,6 +36,7 @@ class Student:
             sum_hw += sum(course) 
             count += len(course)
         return round(sum_hw / count, 2)
+    
 
     def __lt__(self, other_student):
         if not isinstance(other_student, Student):
@@ -48,8 +49,7 @@ class Student:
             else:
                 print(f'{self.name} {self.surname} учится лучше, чем {other_student.name} {other_student.surname}')
             return compare
-            
-    
+
 #def av_grades(course = 'Python'):
     #av_list = []
     #for student in Student.student_ch:
@@ -122,7 +122,21 @@ class Reviewer(Mentor):
               f'Фамилия: {self.surname}\n'
         return res
 
+def av_grade_lectors(lectors, course):
+    sum_t = 0
+    for lector in lectors:
+        for c, scores in lector.scores.items():
+            if c == course:
+                sum_t += sum(scores) / len(scores)
+    return sum_t / len(lectors)  
 
+def av_grade(students_list, course):
+    sum_t = 0
+    for student in students_list:
+        for c, grades in student.grades.items():
+            if c == course:
+                sum_t += sum(grades) / len(grades)
+    return sum_t / len(students_list) 
 
 student_1 = Student('Иван', 'Иванов', 'мужской')
 student_1.courses_in_progress += ['Python', 'English']
@@ -160,21 +174,23 @@ student_2.score_hw(lector_2, 'English', 5)
 print(student_1.grades)
 print(student_2.grades)
 
-print(student_1)
-print(student_2)
+#print(student_1)
+#print(student_2)
 
-print(mentor_1)
-print(mentor_2)
+#print(mentor_1)
+#print(mentor_2)
 
 print(lector_1.scores)
 print(lector_2.scores)
 
-print(lector_1)
-print(lector_2)
+#print(lector_1)
+#print(lector_2)
 
 print(student_1.__lt__(student_2))
 print(lector_1.__lt__(lector_2))
-
+print()
+print(av_grade(Student.student_list, 'Python' ))
+print(av_grade_lectors(Lecturer.lectors, 'Python' ))
 #old_student = Student('Ruoy', 'Eman', 'male')
 #old_student.courses_in_progress += ['Python']
 
